@@ -1,4 +1,4 @@
-package pl.coderslab.entity;
+package pl.coderslab;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -15,7 +15,7 @@ public class UserDao {
 
 
     public User create(User user) {
-        try(Connection conn = DbUtil.connect()){
+        try(Connection conn = DbUtil.getConnection()){
             PreparedStatement preStmt = conn.prepareStatement(CREATE_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             preStmt.setString(1, user.getUserName());
             preStmt.setString(2, user.getEmail());
@@ -33,7 +33,7 @@ public class UserDao {
     }
 
     public User read(int userId){
-        try(Connection conn = DbUtil.connect(); PreparedStatement preStmt = conn.prepareStatement(READ_USER_QUERY)){
+        try(Connection conn = DbUtil.getConnection(); PreparedStatement preStmt = conn.prepareStatement(READ_USER_QUERY)){
             if(checkId(userId)){
                 User user = new User();
                 preStmt.setLong(1, userId);
@@ -52,7 +52,7 @@ public class UserDao {
     }
 
     public void updateWithPass(User user){
-        try(Connection conn = DbUtil.connect(); PreparedStatement preStmt = conn.prepareStatement(UPDATE_USER_QUERY_WITH_PASS)){
+        try(Connection conn = DbUtil.getConnection(); PreparedStatement preStmt = conn.prepareStatement(UPDATE_USER_QUERY_WITH_PASS)){
             preStmt.setString(1, user.getUserName());
             preStmt.setString(2, user.getEmail());
             preStmt.setString(3, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
@@ -64,7 +64,7 @@ public class UserDao {
     }
 
     public void updateWithNoPass(User user){
-        try(Connection conn = DbUtil.connect(); PreparedStatement preStmt = conn.prepareStatement(UPDATE_USER_QUERY_WITH_NO_PASS)){
+        try(Connection conn = DbUtil.getConnection(); PreparedStatement preStmt = conn.prepareStatement(UPDATE_USER_QUERY_WITH_NO_PASS)){
             preStmt.setString(1, user.getUserName());
             preStmt.setString(2, user.getEmail());
             preStmt.setLong(3, user.getId());
@@ -75,7 +75,7 @@ public class UserDao {
     }
 
     public void delete(int userID){
-        try(Connection conn = DbUtil.connect()){
+        try(Connection conn = DbUtil.getConnection()){
             PreparedStatement preStmt = conn.prepareStatement(DELETE_USER_QUERY);
 
             if(checkId(userID)){
@@ -95,7 +95,7 @@ public class UserDao {
 
     public User[] findAll(){
         User[] users = new User[0];
-        try(Connection conn = DbUtil.connect(); Statement stmt = conn.createStatement()){
+        try(Connection conn = DbUtil.getConnection(); Statement stmt = conn.createStatement()){
 
             ResultSet rs = stmt.executeQuery("select * from users");
             while(rs.next()){
@@ -119,7 +119,7 @@ public class UserDao {
     }
 
     public static boolean checkId(int id) {
-        try (Connection conn = DbUtil.connect()) {
+        try (Connection conn = DbUtil.getConnection()) {
             String sqlEdit = "select * from users where id =?";
             PreparedStatement statement = conn.prepareStatement(sqlEdit);
             statement.setInt(1, id);

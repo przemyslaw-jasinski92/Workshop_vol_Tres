@@ -1,16 +1,53 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: onufry
-  Date: 30.09.2022
-  Time: 12:43
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>Title</title>
-  </head>
-  <body>
-  
-  </body>
-</html>
+<%@ include file="/fragments/header.jsp" %>
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-2 text-gray-800">UsersCRUD</h1>
+        <a href="/user/add" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Add new user</a>
+    </div>
+
+    <!-- Content Row -->
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">List of users</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="dataTable" class="table table-bordered dataTable" aria-describedby="dataTable_info">
+                            <thead>
+                            <tr role="row">
+                                <th>Id</th>
+                                <th>User name</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${users}" var="user">
+                                <tr>
+                                    <td>${user.id}</td>
+                                    <td>${user.userName}</td>
+                                    <td>${user.email}</td>
+                                    <td><a href="/user/show?id=${user.id}">Show </a>
+                                        <a href="/user/edit?id=${user.id}">Edit </a>
+                                        <a href="/user/delete?id=${user.id}">Delete</a></td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- End of Main Content -->
+<%@ include file="/fragments/footer.jsp" %>

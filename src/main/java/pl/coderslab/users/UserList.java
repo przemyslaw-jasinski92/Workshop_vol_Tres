@@ -1,15 +1,28 @@
 package pl.coderslab.users;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import java.io.IOException;
+import pl.coderslab.User;
+import pl.coderslab.UserDao;
 
-@WebServlet(name = "UserList", value = "/UserList")
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@WebServlet(name = "UserList", value = "/user/list")
 public class UserList extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        HttpSession sess = request.getSession();
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("text/html;charset=utf-8");
+        UserDao userDao = new UserDao();
+        request.setAttribute("users", userDao.findAll());
+        request.getRequestDispatcher("/users/list.jsp").forward(request, response);
     }
 
     @Override
