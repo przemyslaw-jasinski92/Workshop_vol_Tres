@@ -25,12 +25,12 @@ public class AddUser extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        if(name == null || name.isBlank() || email == null || email.isBlank() || password == null || password.isBlank()){
+        if (name == null || name.isBlank() || email == null || email.isBlank() || password == null || password.isBlank()) {
             response.sendRedirect("/user/list");
             return;
         }
         UserDao userDao = new UserDao();
-        User user = new User(name,email, password);
+        User user = new User(name, email, password);
         userDao.create(user);
         response.sendRedirect("/user/list");
     }
